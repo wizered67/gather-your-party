@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Layout } from "./Layout";
 
 class List extends Component {
   // Initialize the state
@@ -24,6 +25,7 @@ class List extends Component {
 
     return (
       <div className="App">
+      <Layout>
         <h1>List of Items</h1>
         {/* Check to see if any items are found*/}
         {list.length ? (
@@ -43,6 +45,7 @@ class List extends Component {
           </div>
         )
       }
+      </Layout>
       </div>
     );
   }
