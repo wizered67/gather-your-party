@@ -19,8 +19,9 @@ class NotificationStream extends Component {
     if (this.state.locationSet) {
       return;
     }
+    const user_id = STITCH_CLIENT.auth.user.id;
     const collection = MDB.db("gather-your-party").collection("notifications");
-    const cursor = collection.find({}, {"sort": {"date": -1}});
+    const cursor = collection.find({owner_id: user_id}, {"sort": {"date": -1}});
     console.log(cursor);
     cursor.asArray().then((notifications) => {
       console.log(notifications);

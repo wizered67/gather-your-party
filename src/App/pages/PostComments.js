@@ -53,14 +53,15 @@ export class PostComments extends Component {
 class PostComment extends Component {
   render() {
     const viewer_id = STITCH_CLIENT.auth.user.id;
+    console.log(viewer_id);
     return (
       <div>
         <b>{this.props.commenter}</b>
         <br/>
         <b>{this.props.date}</b>
         <p>{this.props.content}</p>
-        {this.props.owner_id === viewer_id ? 
-          (<div><button>TEST</button></div>)
+        {this.props.postOwnerId === viewer_id ? 
+          (<div><button>Accept</button></div>)
           : null
         } 
       </div>

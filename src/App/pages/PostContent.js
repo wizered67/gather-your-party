@@ -42,7 +42,7 @@ export class PostContent extends Component {
     };
   }
 
-  componentDidMount() {
+  refresh() {
     console.log(this.props._id);
     const collection = MDB.db("gather-your-party").collection("dm-posts");
     const cursor = collection.find({_id: this.props._id});
@@ -68,7 +68,10 @@ export class PostContent extends Component {
         owner_name: postContent.owner_name,
       });
     });
-    
+  }
+
+  componentDidMount() {
+    this.refresh();
   }
 
   render() {
@@ -89,7 +92,7 @@ export class PostContent extends Component {
             <form onSubmit={this.leaveComment}>
               <textarea name="commentContent" rows="5" cols="50" value={this.state.commentContent} onChange={this.handleChange}/>
               <br/>
-              <input type="submit" value="Submit" />
+              <input type="submit" value="Apply" />
             </form>
             ) : null}
         </div>
@@ -123,6 +126,11 @@ export class PostContent extends Component {
     //owner_id: user.id, title, content, date: new Date()
     const collection = MDB.db("gather-your-party").collection("dm-posts");
     console.log(collection.updateOne({_id: this.props._id}, {"$push": {interested: comment}}));
+    const notifications = MDB.db("gather-your-party").collection("notifications");
+    const content = `${user.profile.data.email} applied for "${this.state.title}"!`
+    notifications.insertOne({owner_id: this.state.owner_id, title: "New Application!", content: content, date: new Date()}).then(() => {
+      this.setState({showCommentBox: false, commentContent: ""});
+    })
   }
   // viewPost = () => {
   //   const title = `Notification: ${this.state.title}`;
