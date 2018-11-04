@@ -17,6 +17,16 @@ class Home extends Component {
             <button variant="raised">
                 My List
             </button>
+          </Link>
+          <Link to={'./new-post'}>
+            <button variant="raised">
+                Find Adventurers!
+            </button>
+          </Link>
+          <Link to={'./posts'}>
+            <button variant="raised">
+                Find Campaigns!
+            </button>
           </Link>  
         </Layout>
       </div>

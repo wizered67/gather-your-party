@@ -69,6 +69,7 @@ class Registration extends Component {
       })
       .catch(err => {
          console.log("Error registering new user:", err);
+         this.registerError(err);
       });
   }
 
@@ -77,10 +78,16 @@ class Registration extends Component {
     this.setState({email: "", password: "", loginErrorMessage: ""});
   }
 
-  loginError = (err) => {
-    console.error(`login error: ${err}`);
-    const errorMessage = `login error: ${err}`;
-    this.setState({email: "", password: "", loginErrorMessage: errorMessage});
+  registerError = (err) => {
+    if (err.message === "name already in use") {
+      const emailPassClient = Stitch.defaultAppClient.auth
+        .getProviderClient(UserPasswordAuthProviderClient.factory);
+      emailPassClient.resendConfirmationEmail(this.state.email);
+    } else {
+      const errorMessage = `login error: ${err}`;
+      this.setState({loginErrorMessage: errorMessage});
+    }
+    this.setState({email: "", password: "", confirmPassword: ""});
   }
 }
 export default Registration;
