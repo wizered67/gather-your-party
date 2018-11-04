@@ -27,6 +27,11 @@ class Home extends Component {
             <button variant="raised">
                 Find Campaigns!
             </button>
+          </Link>
+          <Link to={'./notifications'}>
+            <button variant="raised">
+                Notifications
+            </button>
           </Link>  
         </Layout>
       </div>

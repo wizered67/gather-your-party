@@ -9,6 +9,8 @@ class PostStream extends Component {
     this.state = {
       postIDs: [],
       locationSet: false,
+      latitude: 0,
+      longitude: 0,
     }
   }
 
@@ -31,10 +33,12 @@ class PostStream extends Component {
        },
       }
     };
-    collection.find(geospatialQuery, "_id").asArray().then((postIDs) => {
+    collection.find(geospatialQuery, {_id: 1, limit: 10}).asArray().then((postIDs) => {
       this.setState({
         postIDs: postIDs,
         locationSet: true,
+        latitude: position.coords.latitude,
+        longitude: position.coords.longitude,
       })
     });
   }
@@ -50,7 +54,7 @@ class PostStream extends Component {
             {this.state.postIDs.map((post) => {
               return(
                 <div key={post._id}>
-                  <PostContent _id={post._id}/>
+                  <PostContent _id={post._id} userLatitude={this.state.latitude} userLongitude={this.state.longitude}/>
                 </div>
               );
             })}

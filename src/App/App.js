@@ -7,6 +7,7 @@ import List from './pages/List';
 import Registration from "./pages/Registration";
 import NewPost from "./pages/NewPost";
 import PostStream from "./pages/PostStream";
+import NotificationStream from "./pages/NotificationStream";
 
 const APP_ID = "gather-your-party-qnzcm";
 export const STITCH_CLIENT = Stitch.initializeDefaultAppClient(APP_ID);
@@ -22,6 +23,7 @@ class App extends Component {
           <Route path="/register" component={Registration}/>
           <Route path="/new-post" component={NewPost}/>
           <Route path="/posts" component={PostStream}/>
+          <Route path="/notifications" component={NotificationStream}/>
         </Switch>
       </div>
     )

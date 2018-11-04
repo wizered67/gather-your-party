@@ -59,8 +59,8 @@ class NewPost extends Component {
     const user = STITCH_CLIENT.auth.user;
     const collection = MDB.db("gather-your-party").collection("dm-posts");
     const { latitude, longitude } = this.state;
-    const location = { type: "Point", coordinates: [ parseFloat(latitude), parseFloat(longitude) ] };
-    console.log(collection.insertOne({owner_id: user.id, title, content, interested: [], location: location}));
+    const location = { type: "Point", coordinates: [ parseFloat(longitude), parseFloat(latitude) ] };
+    collection.insertOne({owner_id: user.id, title, content, interested: [], location: location}).then(() => this.props.history.push('/posts'));
   }
 }
 
