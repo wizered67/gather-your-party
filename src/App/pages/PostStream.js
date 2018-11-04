@@ -12,6 +12,7 @@ class PostStream extends Component {
       locationSet: false,
       latitude: 0,
       longitude: 0,
+      commentsPointers: [],
     }
   }
 
@@ -44,6 +45,18 @@ class PostStream extends Component {
     });
   }
 
+  forceRefresh = () => {
+    for (var i = this.state.commentsPointers.length - 1; i >= 0; i--) {
+      const cp = this.state.commentsPointers[i];
+      if (cp)
+        cp.refresh();
+    }
+  }
+
+  setCommentsPointer = (comments) => {
+    this.state.commentsPointers.push(comments);
+  }
+
   render() {
     return (
       <div className="App">
@@ -55,8 +68,9 @@ class PostStream extends Component {
             {this.state.postIDs.map((post) => {
               return(
                 <div key={post._id}>
-                  <PostContent _id={post._id} userLatitude={this.state.latitude} userLongitude={this.state.longitude}/>
-                  <PostComments _id={post._id}/>
+                  <PostContent _id={post._id} userLatitude={this.state.latitude} userLongitude={this.state.longitude} commentRefresh={this.forceRefresh}/>
+                  <br/>
+                  <PostComments _id={post._id} postOwnerId={post.owner_id} setCommentsPointer={this.setCommentsPointer}/>
                 </div>
               );
             })}

@@ -66,6 +66,7 @@ class Registration extends Component {
     emailPassClient.registerWithEmail(email, password)
       .then(() => {
          console.log("Successfully sent account confirmation email!");
+         this.props.history.push('/');
       })
       .catch(err => {
          console.log("Error registering new user:", err);

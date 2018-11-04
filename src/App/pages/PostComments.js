@@ -9,18 +9,24 @@ export class PostComments extends Component {
     super(props);
     this.state = {
       comments: [],
-      postOwnerId: 0,
     }
+    this.props.setCommentsPointer(this);
+  }
+
+  refresh = () => {
+    console.log("gg refresh called!");
+    console.log(this.props);
+    console.log(this.props._id);
+    const collection = MDB.db("gather-your-party").collection("comments");
+    const cursor = collection.find({post_id: this.props._id});
+    cursor.asArray().then((comments) => {
+      console.log(comments);
+      this.setState({comments: comments});
+    })
   }
 
   componentDidMount() {
-    console.log(this.props._id);
-    const collection = MDB.db("gather-your-party").collection("dm-posts");
-    const cursor = collection.find({_id: this.props._id}, {interested: 1, owner_id: 1});
-    cursor.asArray().then((post) => {
-      console.log(post);
-      this.setState({postOwnerId: post[0].owner_id, comments: post[0].interested});
-    })
+    this.refresh();
   }
 
   render = () => {
@@ -30,10 +36,12 @@ export class PostComments extends Component {
           <div>
             {/* Render the list of items */}
             {this.state.comments.map((comment) => {
-              const { commenter, date, content } = comment;
+              const { _id, post_id, owner_id, commenter, date, content, approved } = comment;
               return(
-                <div key={commenter}> {/*This assumes commenter is unique btw*/}
-                  <PostComment postOwnerId={this.state.postOwnerId} commenter={commenter} content={content} date={date.toString()}/>
+                <div key={_id}> {/*This assumes commenter is unique btw*/}
+                  <PostComment post_id={post_id} owner_id={owner_id} postOwnerId={this.props.postOwnerId} 
+                    commenter={commenter} content={content} date={date.toString()} 
+                    approved={approved} refresh={this.refresh}/>
                 </div>
               );
             })}
@@ -51,20 +59,33 @@ export class PostComments extends Component {
 }
 
 class PostComment extends Component {
+
+  constructor(props) {
+    super(props);
+  }
+
   render() {
     const viewer_id = STITCH_CLIENT.auth.user.id;
     console.log(viewer_id);
+    const color = this.props.approved && (this.props.postOwnerId === viewer_id || this.props.owner_id === viewer_id) ? "green" : "black";
+    console.log(color);
     return (
       <div>
-        <b>{this.props.commenter}</b>
+        <b style={{color: color}}>{this.props.commenter}</b>
         <br/>
         <b>{this.props.date}</b>
         <p>{this.props.content}</p>
-        {this.props.postOwnerId === viewer_id ? 
-          (<div><button>Accept</button></div>)
+        {this.props.postOwnerId === viewer_id && this.props.postOwnerId !== this.props.owner_id && !this.props.approved ? 
+          (<div><button onClick={this.acceptComment}>Accept</button></div>)
           : null
         } 
       </div>
     )
+  }
+
+  acceptComment = () => {
+    //this.setState({approved: true});
+    const collection = MDB.db("gather-your-party").collection("comments");
+    collection.updateMany({owner_id: this.props.owner_id, post_id: this.props.post_id}, {"$set": {approved: true}}).then(() => {this.props.refresh()});
   }
 }

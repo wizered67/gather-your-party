@@ -22,6 +22,7 @@ class Header extends Component {
       email: "",
       password: "",
       loggedIn: false,
+      loggedInEmail: "",
       loginErrorMessage: "",
     }
   }
@@ -32,6 +33,11 @@ class Header extends Component {
 
   updateLoggedIn = () => {
     this.setState({loggedIn: STITCH_CLIENT.auth.isLoggedIn});
+    if (STITCH_CLIENT.auth.isLoggedIn) {
+      this.setState({loggedInEmail: STITCH_CLIENT.auth.user.profile.data.email});
+    } else {
+      this.setState({loggedInEmail: ""});
+    }
   }
 
   render() {
@@ -62,7 +68,12 @@ class Header extends Component {
        <Link to={'./register'}>Register</Link>
       </div>)
     }
-    return <button onClick={this.logout}>Logout</button>;
+    return (
+      <div>
+      <b>Hello {this.state.loggedInEmail}!</b>
+      <button onClick={this.logout}>Logout</button>
+      </div>
+      );
   }
 
   logout = () => {

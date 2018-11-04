@@ -83,6 +83,7 @@ export class PostContent extends Component {
     if (this.state.postFound) {
       content = (
         <div onClick={()=>this.tryComment()}>
+          <hr/>
           <h1>{this.state.title}</h1>
           <b>{this.state.owner_name}</b>
           <br/>
@@ -96,6 +97,7 @@ export class PostContent extends Component {
             </form>
             ) : null}
         </div>
+
       )
     }
     
@@ -120,16 +122,17 @@ export class PostContent extends Component {
     event.preventDefault();
     const user = STITCH_CLIENT.auth.user;
 
-    const comment = {owner_id: user.id, commenter: user.profile.data.email, content: this.state.commentContent, date: new Date()};
+    const comment = {post_id: this.props._id, owner_id: user.id, commenter: user.profile.data.email, content: this.state.commentContent, date: new Date(), approved: false};
     console.log(comment);
     console.log(this.props._id);
     //owner_id: user.id, title, content, date: new Date()
-    const collection = MDB.db("gather-your-party").collection("dm-posts");
-    console.log(collection.updateOne({_id: this.props._id}, {"$push": {interested: comment}}));
+    const collection = MDB.db("gather-your-party").collection("comments");
+    console.log(collection.insertOne(comment));
     const notifications = MDB.db("gather-your-party").collection("notifications");
     const content = `${user.profile.data.email} applied for "${this.state.title}"!`
     notifications.insertOne({owner_id: this.state.owner_id, title: "New Application!", content: content, date: new Date()}).then(() => {
       this.setState({showCommentBox: false, commentContent: ""});
+      this.props.commentRefresh();
     })
   }
   // viewPost = () => {
