@@ -70,7 +70,7 @@ class PostStream extends Component {
                 <div key={post._id}>
                   <PostContent _id={post._id} userLatitude={this.state.latitude} userLongitude={this.state.longitude} commentRefresh={this.forceRefresh}/>
                   <br/>
-                  <PostComments _id={post._id} postOwnerId={post.owner_id} setCommentsPointer={this.setCommentsPointer}/>
+                  <PostComments _id={post._id} postTitle={post.title} postOwnerId={post.owner_id} setCommentsPointer={this.setCommentsPointer}/>
                 </div>
               );
             })}
