@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-
+import { STITCH_CLIENT } from "../App";
 import { Layout } from "./Layout";
 
 class Home extends Component {
@@ -11,13 +11,7 @@ class Home extends Component {
     return (
       <div className="App">
         <Layout>
-          <h1>Project Home</h1>
           {/* Link to List.js */}
-          <Link to={'./list'}>
-            <button variant="raised">
-                My List
-            </button>
-          </Link>
           <Link to={'./new-post'}>
             <button variant="raised">
                 Find Adventurers!

@@ -1,18 +1,20 @@
 import React, { Component } from 'react';
 import { STITCH_CLIENT } from "../App";
 import { Link } from 'react-router-dom';
+import { withRouter } from "react-router";
 import { Stitch, UserPasswordCredential } from "mongodb-stitch-browser-sdk";
 export class Layout extends Component {
   render() {
       return(
          <div>
-            <Header />
+            <HeaderWithRouter />
                { this.props.children }
             <Footer />
          </div>
       );
   }
 }
+
 class Header extends Component {
   constructor(props){
     super(props);
@@ -36,7 +38,7 @@ class Header extends Component {
     const loginOrOut = this.getLoginOrLogout();
       return (
           <div>
-            <h1>HEADER</h1>
+            <h1>Gather Your Party!</h1>
             {loginOrOut}
             <Link to={'./'}>Home</Link>
           </div>
@@ -64,7 +66,10 @@ class Header extends Component {
   }
 
   logout = () => {
-    STITCH_CLIENT.auth.logout().then(() => this.updateLoggedIn());
+    STITCH_CLIENT.auth.logout().then(() => {
+      this.updateLoggedIn()
+      this.props.history.push('/')
+    });
   }
 
   handleChange = (event) => {
@@ -100,6 +105,8 @@ class Header extends Component {
     this.setState({email: "", password: "", loginErrorMessage: errorMessage});
   }
 }
+
+const HeaderWithRouter = withRouter(Header);
 
 class Footer extends Component {
   render() {

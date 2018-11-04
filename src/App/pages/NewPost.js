@@ -60,7 +60,7 @@ class NewPost extends Component {
     const collection = MDB.db("gather-your-party").collection("dm-posts");
     const { latitude, longitude } = this.state;
     const location = { type: "Point", coordinates: [ parseFloat(longitude), parseFloat(latitude) ] };
-    collection.insertOne({owner_id: user.id, title, content, interested: [], location: location}).then(() => this.props.history.push('/posts'));
+    collection.insertOne({owner_id: user.id, owner_name: user.profile.data.email, title, content, interested: [], location: location}).then(() => this.props.history.push('/posts'));
   }
 }
 

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Layout } from "./Layout";
 import { STITCH_CLIENT, MDB } from "../App";
 import { PostContent } from "./PostContent";
+import { PostComments } from "./PostComments";
 class PostStream extends Component {
 
   constructor(props){
@@ -55,6 +56,7 @@ class PostStream extends Component {
               return(
                 <div key={post._id}>
                   <PostContent _id={post._id} userLatitude={this.state.latitude} userLongitude={this.state.longitude}/>
+                  <PostComments _id={post._id}/>
                 </div>
               );
             })}
