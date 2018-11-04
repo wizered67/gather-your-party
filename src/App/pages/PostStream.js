@@ -8,14 +8,33 @@ class PostStream extends Component {
     super(props);
     this.state = {
       postIDs: [],
+      locationSet: false,
     }
   }
 
   componentDidMount() {
+    navigator.geolocation.getCurrentPosition(this.updateDistance);
+  }
+
+  updateDistance = (position) => {
+    if (this.state.locationSet) {
+      return;
+    }
     const collection = MDB.db("gather-your-party").collection("dm-posts");
-    collection.find({}, "_id").asArray().then((postIDs) => {
+    const geospatialQuery = {
+      location: {
+        "$near": {
+          "$geometry": {
+            type: "Point" ,
+            coordinates: [ position.coords.longitude , position.coords.latitude ]
+          },
+       },
+      }
+    };
+    collection.find(geospatialQuery, "_id").asArray().then((postIDs) => {
       this.setState({
         postIDs: postIDs,
+        locationSet: true,
       })
     });
   }
@@ -24,7 +43,6 @@ class PostStream extends Component {
     return (
       <div className="App">
       <Layout>
-        <h1>List of Items</h1>
         {/* Check to see if any items are found*/}
         {this.state.postIDs.length ? (
           <div>

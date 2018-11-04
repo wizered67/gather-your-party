@@ -38,6 +38,7 @@ class Header extends Component {
           <div>
             <h1>HEADER</h1>
             {loginOrOut}
+            <Link to={'./'}>Home</Link>
           </div>
         );
   }

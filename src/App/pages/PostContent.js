@@ -21,7 +21,7 @@ export class PostContent extends Component {
     const collection = MDB.db("gather-your-party").collection("dm-posts");
     collection.find({_id: this.props._id}).asArray().then((postContent) => {
       //console.log(postContent);
-      if (!postContent || postContent.length == 0) {
+      if (!postContent || postContent.length === 0) {
         this.setState({postFound: false});
         return;
       }
