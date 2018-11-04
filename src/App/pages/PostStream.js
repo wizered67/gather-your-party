@@ -67,7 +67,7 @@ class PostStream extends Component {
             {/* Render the list of items */}
             {this.state.postIDs.map((post) => {
               return(
-                <div key={post._id}>
+                <div key={post._id} id={`post_${post._id}`}>
                   <PostContent _id={post._id} userLatitude={this.state.latitude} userLongitude={this.state.longitude} commentRefresh={this.forceRefresh}/>
                   <br/>
                   <PostComments _id={post._id} postTitle={post.title} postOwnerId={post.owner_id} setCommentsPointer={this.setCommentsPointer}/>

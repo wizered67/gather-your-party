@@ -40,10 +40,11 @@ class NotificationStream extends Component {
           <div>
             {/* Render the list of items */}
             {this.state.notifications.map((notification) => {
-              const { title, date, content } = notification;
+              const { title, date, content, originalContent } = notification;
+              const link = `/posts#${originalContent}`;
               return(
                 <div key={notification._id}>
-                  <NotificationContent title={title} date={date.toString()} content={content}/>
+                    <NotificationContent link={link} title={title} date={date.toString()} content={content}/>
                 </div>
               );
             })}

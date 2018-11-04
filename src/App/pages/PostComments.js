@@ -86,12 +86,12 @@ class PostComment extends Component {
   acceptComment = () => {
     //this.setState({approved: true});
     const collection = MDB.db("gather-your-party").collection("comments");
-    collection.updateMany({owner_id: this.props.owner_id, post_id: this.props.post_id}, {"$set": {approved: true}}).then(() => {
-      this.props.refresh()
-      const notifications = MDB.db("gather-your-party").collection("notifications");
-      const content = `You've been accepted to join "${this.props.postTitle}"! Let the adventures begin!`;
-      notifications.insertOne({owner_id: this.props.owner_id, title: `You've Been Accepted!`, content: content, date: new Date()}).then(() => {
-    })
+      collection.updateMany({owner_id: this.props.owner_id, post_id: this.props.post_id}, {"$set": {approved: true}}).then(() => {
+        this.props.refresh()
+        const notifications = MDB.db("gather-your-party").collection("notifications");
+        const content = `You've been accepted to join "${this.props.postTitle}"! Let the adventures begin!`;
+        notifications.insertOne({owner_id: this.props.owner_id, originalContent: `post_${this.props.post_id}`,  title: `You've Been Accepted!`, content: content, date: new Date()}).then(() => {
+      })
     });
   }
 }
